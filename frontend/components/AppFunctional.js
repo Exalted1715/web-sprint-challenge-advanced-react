@@ -22,7 +22,7 @@ export default function AppFunctional(props) {
   // Calculate the row and column based on the index
   const row = Math.floor(index / 3);
   const col = index % 3;
-  return { row: 2 - row, col }; // Adjusting the row calculation to show correct coordinates
+  return { row: row, col: col }; // Adjusting the row calculation to show correct coordinates
 }
 
 
