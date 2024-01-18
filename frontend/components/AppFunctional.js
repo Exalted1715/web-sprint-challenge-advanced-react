@@ -85,14 +85,25 @@ export default function AppFunctional(props) {
 
   function onSubmit(evt) {
     // Use a POST request to send a payload to the server.
-    evt.preventDefault();
-    // Use a POST request to send a payload to the server. You can customize this part based on your server requirements.
-    axios.post('http://localhost:9000/api/result', { email })
+    evt.preventDefault();const { row, col } = getXY();
+
+    const payload = {
+      x: col + 1, // Converting from 0-based to 1-based indexing
+      y: row + 1, // Converting from 0-based to 1-based indexing
+      steps,
+      email
+    };
+
+    axios.post('http://localhost:9000/api/result', payload)
       .then(response => {
-        setMessage(response.data.message); // Update message based on the server response
+        setMessage(response.data.message);
       })
       .catch(error => {
-        setMessage('Error submitting email.'); // Handle error case
+        if (error.response && error.response.status === 422) {
+          setMessage('Unprocessable Entity');
+        } else {
+          setMessage('Error submitting email.');
+        }
       });
   }
 
