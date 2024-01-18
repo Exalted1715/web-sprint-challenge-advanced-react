@@ -26,9 +26,6 @@ export default function AppFunctional(props) {
   }
 
   function getXYMessage() {
-    // It is not necessary to have a state to track the "Coordinates (2, 2)" message for the user.
-    // You can use the `getXY` helper above to obtain the coordinates, and then `getXYMessage`
-    // returns the fully constructed string.
     const { row, col } = getXY();
     return `Coordinates (${col}, ${row})`; // Swap col and row in the template string
   }
