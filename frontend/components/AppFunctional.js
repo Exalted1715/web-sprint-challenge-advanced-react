@@ -103,6 +103,14 @@ export default function AppFunctional(props) {
     setEmail(evt.target.value);
   }
 
+  useEffect(() => {
+    // This effect will run whenever index or steps changes
+    // Reset coordinates (index) and steps to their starting positions
+    setIndex(initialIndex);
+    setSteps(initialSteps);
+  }, [index, steps]);
+
+
   function onSubmit(evt) {
     // Use a POST request to send a payload to the server.
     evt.preventDefault();
@@ -129,8 +137,8 @@ function isValidEmail(email) {
     const { row, col } = getXY();
   
     const payload = {
-      x: col, // Converting from 0-based to 1-based indexing
-      y: row, // Converting from 0-based to 1-based indexing
+      x: col, 
+      y: row, 
       steps,
       email
     };
@@ -140,9 +148,6 @@ function isValidEmail(email) {
       setMessage(response.data.message);
       // Clear and reset the email input field
       setEmail('');
-      // Reset coordinates (index) and steps to their starting positions
-      setIndex(initialIndex);
-      setSteps(initialSteps);
     })
     .catch(error => {
       console.log(error);
