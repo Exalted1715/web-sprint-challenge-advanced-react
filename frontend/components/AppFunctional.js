@@ -110,13 +110,14 @@ export default function AppFunctional(props) {
     const { row, col } = getXY();
   
     const payload = {
-      x: col + 1, // Converting from 0-based to 1-based indexing
-      y: row + 1, // Converting from 0-based to 1-based indexing
+      x: col, // Converting from 0-based to 1-based indexing
+      y: row, // Converting from 0-based to 1-based indexing
       steps,
       email
     };
   
     axios.post('http://localhost:9000/api/result', payload)
+   
       .then(response => {
         setMessage(response.data.message);
         // Clear and reset the email input field
@@ -141,14 +142,16 @@ export default function AppFunctional(props) {
         <h3 id="steps">{getStepsMessage()}</h3>
       </div>
       <div id="grid">
-        {
-          [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => (
-            <div key={idx} className={`square${idx === index ? ' active' : ''}`}>
-              {idx === index ? 'B' : null}
-            </div>
-          ))
-        }
-      </div>
+      {
+    [1, 2, 3].map(row => (
+      [1, 2, 3].map(col => (
+        <div key={`${row}-${col}`} className={`square${row === getXY().row && col === getXY().col ? ' active' : ''}`}>
+          {row === getXY().row && col === getXY().col ? 'B' : null}
+        </div>
+      ))
+    ))
+  }
+</div>
       <div className="info">
         <h3 id="message">{message}</h3>
       </div>
