@@ -17,21 +17,20 @@ export default function AppFunctional(props) {
   const [index, setIndex] = useState(initialIndex);
 
   function getXY() {
-    // It it not necessary to have a state to track the coordinates.
+    // It is not necessary to have a state to track the coordinates.
     // It's enough to know what index the "B" is at, to be able to calculate them.
-  // Calculate the row and column based on the index
-  const row = Math.floor(index / 3);
-  const col = index % 3;
-  return { row: row, col: col }; // Adjusting the row calculation to show correct coordinates
-}
-
+    // Calculate the row and column based on the index
+    const row = Math.floor(index / 3) + 1; // Adjusting row calculation and converting to 1-based indexing
+    const col = index % 3 + 1; // Adjusting column calculation and converting to 1-based indexing
+    return { row, col };
+  }
 
   function getXYMessage() {
-    // It it not necessary to have a state to track the "Coordinates (2, 2)" message for the user.
+    // It is not necessary to have a state to track the "Coordinates (2, 2)" message for the user.
     // You can use the `getXY` helper above to obtain the coordinates, and then `getXYMessage`
     // returns the fully constructed string.
     const { row, col } = getXY();
-    return `Coordinates (${row + 1}, ${col + 1})`; // Adding 1 to convert from 0-based to 1-based indexing
+    return `Coordinates (${col}, ${row})`; // Swap col and row in the template string
   }
 
   function reset() {
