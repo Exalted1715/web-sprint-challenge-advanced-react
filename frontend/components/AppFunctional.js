@@ -103,7 +103,7 @@ export default function AppFunctional(props) {
 
 
   
-  function onSubmit(evt) {
+  async function onSubmit(evt) {
     // Use a POST request to send a payload to the server.
     evt.preventDefault();
  // Check if the email is blank
@@ -134,20 +134,20 @@ function isValidEmail(email) {
       steps,
       email
     };
-  
-    axios.post('http://localhost:9000/api/result', payload)
-    .then(response => {
+
+    try {
+      const response = await axios.post('http://localhost:9000/api/result', payload);
+      console.log(payload);
       setMessage(response.data.message);
-      // Clear and reset the email input field
+      console.log(response.data.message);
       setEmail('');
-      // Reset coordinates (index) and steps to their starting positions
       setIndex(initialIndex);
       setSteps(initialSteps);
-    })
-    .catch(error => {
-      console.log(error);
+    } catch (error) {
+      console.error(error);
+  
       if (error.response) {
-        console.log(error.resp)
+        // Handle error responses
         if (error.response.status === 422) {
           setMessage('Unprocessable Entity');
         } else if (error.response.status === 403) {
@@ -156,8 +156,8 @@ function isValidEmail(email) {
           setMessage('Error submitting email.');
         }
       }
-    });
-}
+    }
+  }
 
   return (
     <div id="wrapper" className={props.className}>
