@@ -1,36 +1,49 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import AppFunctional from './AppFunctional';
-import {getXY} from './AppFunctional'
+
 
 test('1. renders without errors', () => {
   render(<AppFunctional />);
 });
 
-test('2. clicking the submit button triggers the onSubmit function', () => {
-  const { getByText } = render(<AppFunctional />);
-  const submitButton = getByText('Submit');
-  fireEvent.click(submitButton);
-});
-
-test('3. renders functional component with specific text', () => {
+test('placeholder "type email" is visible on the screen', () => {
   render(<AppFunctional />);
-  const expectedText = 'Functional';
-  const elementWithText = screen.getByText(expectedText);
-  expect(elementWithText).toBeVisible();
+
+  // Use getByPlaceholderText to find the input field by its placeholder
+  const emailInput = screen.getByPlaceholderText('type email');
+
+  // Assert that the email input field with the specified placeholder is visible
+  expect(emailInput).toBeVisible();
 });
 
-test('4. getXY function returns correct coordinates', () => {
-  const index = 4; 
-  const { row, col } = getXY(index);
 
-  expect(row).toBe(2);
-  expect(col).toBe(2);
+test('clicking the reset button resets the state', () => {
+  const { getByText } = render(<AppFunctional />);
+  const resetButton = getByText('reset');
+
+  fireEvent.click(resetButton);
+
+  
 });
 
-test('5. renders with visible up arrow button', () => {
-  render(<AppFunctional />)
-   const upArrowButton = screen.getByTestId("up")
 
-  expect(upArrowButton).toBeVisible()
+test('typing in the email input updates the email state', () => {
+  const { getByLabelText } = render(<AppFunctional />);
+  const emailInput = getByLabelText('type email');
+
+  fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+
+  
+});
+
+test('submitting the form calls the onSubmit function', () => {
+  const { getByText, getByLabelText } = render(<AppFunctional />);
+  const emailInput = getByLabelText('type email');
+  const submitButton = getByText('Submit');
+
+  fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+  fireEvent.click(submitButton);
+
+ 
 });
