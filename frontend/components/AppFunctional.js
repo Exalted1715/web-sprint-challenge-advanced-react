@@ -107,6 +107,11 @@ export default function AppFunctional(props) {
     // Use a POST request to send a payload to the server.
     evt.preventDefault();
 
+    if (!email.trim()) {
+      setMessage('email is required.');
+      return;
+    }
+
     const { row, col } = getXY();
   
     const payload = {
@@ -117,23 +122,27 @@ export default function AppFunctional(props) {
     };
   
     axios.post('http://localhost:9000/api/result', payload)
-   
-      .then(response => {
-        setMessage(response.data.message);
-        // Clear and reset the email input field
-        setEmail('');
-         // Reset coordinates (index) and steps to their starting positions
+    .then(response => {
+      setMessage(response.data.message);
+      // Clear and reset the email input field
+      setEmail('');
+      // Reset coordinates (index) and steps to their starting positions
       setIndex(initialIndex);
       setSteps(initialSteps);
-      })
-      .catch(error => {
-        if (error.response && error.response.status === 422) {
+    })
+    .catch(error => {
+      console.log(error);
+      if (error.response) {
+        if (error.response.status === 422) {
           setMessage('Unprocessable Entity');
+        } else if (error.response.status === 403) {
+          setMessage(error.response.data.message);
         } else {
           setMessage('Error submitting email.');
         }
-      });
-  }
+      }
+    });
+}
 
   return (
     <div id="wrapper" className={props.className}>
