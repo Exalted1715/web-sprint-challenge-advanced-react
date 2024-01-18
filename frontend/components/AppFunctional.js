@@ -99,9 +99,6 @@ export default function AppFunctional(props) {
     // You will need this to update the value of the input.
     setEmail(evt.target.value);
   }
-
-
-
   
   async function onSubmit(evt) {
     // Use a POST request to send a payload to the server.
