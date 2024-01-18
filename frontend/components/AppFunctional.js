@@ -106,11 +106,25 @@ export default function AppFunctional(props) {
   function onSubmit(evt) {
     // Use a POST request to send a payload to the server.
     evt.preventDefault();
+ // Check if the email is blank
+ if (!email.trim()) {
+  setMessage('Ouch: email is required.');
+  return;
+}
 
-    if (!email.trim()) {
-      setMessage('email is required.');
-      return;
-    }
+// Check if the email has a valid format
+if (!isValidEmail(email)) {
+  setMessage("Ouch: email must be a valid email.");
+  return;
+}
+
+// Helper function to check if the email has a valid format
+function isValidEmail(email) {
+  // Use a simple regex pattern to check for a valid email format
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailPattern.test(email);
+}
+
 
     const { row, col } = getXY();
   
@@ -133,6 +147,7 @@ export default function AppFunctional(props) {
     .catch(error => {
       console.log(error);
       if (error.response) {
+        console.log(error.resp)
         if (error.response.status === 422) {
           setMessage('Unprocessable Entity');
         } else if (error.response.status === 403) {
