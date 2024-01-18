@@ -1,13 +1,14 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import AppFunctional from './AppFunctional';
+import './index.js';
 
 
 test('1. renders without errors', () => {
   render(<AppFunctional />);
 });
 
-test('placeholder "type email" is visible on the screen', () => {
+test('placeholder "type email" placeholder is visible on the screen', () => {
   render(<AppFunctional />);
 
   // Use getByPlaceholderText to find the input field by its placeholder
