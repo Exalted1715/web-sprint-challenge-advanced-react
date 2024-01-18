@@ -22,7 +22,7 @@ export default function AppFunctional(props) {
   // Calculate the row and column based on the index
   const row = Math.floor(index / 3);
   const col = index % 3;
-  return { row: 2 - row - 1, col }; // Adjusting the row calculation to show correct coordinates
+  return { row: 2 - row, col }; // Adjusting the row calculation to show correct coordinates
 }
 
 
@@ -73,9 +73,25 @@ export default function AppFunctional(props) {
       setSteps(steps + 1);
       setMessage('');
     } else {
-      setMessage('Cannot move in that direction.');
+      // Display appropriate message for reaching the edges
+    switch (direction) {
+      case 'up':
+        setMessage("You can't go up");
+        break;
+      case 'right':
+        setMessage("You can't go right");
+        break;
+      case 'left':
+        setMessage("You can't go left");
+        break;
+      case 'down':
+        setMessage("You can't go down");
+        break;
+      default:
+        setMessage('Cannot move in that direction.');
     }
   }
+}
 
 
   function onChange(evt) {
@@ -85,18 +101,25 @@ export default function AppFunctional(props) {
 
   function onSubmit(evt) {
     // Use a POST request to send a payload to the server.
-    evt.preventDefault();const { row, col } = getXY();
+    evt.preventDefault();
 
+    const { row, col } = getXY();
+  
     const payload = {
       x: col + 1, // Converting from 0-based to 1-based indexing
       y: row + 1, // Converting from 0-based to 1-based indexing
       steps,
       email
     };
-
+  
     axios.post('http://localhost:9000/api/result', payload)
       .then(response => {
         setMessage(response.data.message);
+        // Clear and reset the email input field
+        setEmail('');
+         // Reset coordinates (index) and steps to their starting positions
+      setIndex(initialIndex);
+      setSteps(initialSteps);
       })
       .catch(error => {
         if (error.response && error.response.status === 422) {
@@ -111,7 +134,7 @@ export default function AppFunctional(props) {
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">{getXYMessage()}</h3>
-        <h3 id="steps">You moved {steps} times</h3>
+        <h3 id="steps">You moved {steps} time</h3>
       </div>
       <div id="grid">
         {
