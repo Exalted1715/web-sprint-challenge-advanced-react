@@ -33,6 +33,11 @@ export default function AppFunctional(props) {
     return `Coordinates (${col}, ${row})`; // Swap col and row in the template string
   }
 
+  function getStepsMessage() {
+    // Adjust the message based on the number of moves
+    return `You moved ${steps} time${steps !== 1 ? 's' : ''}`;
+  }
+
   function reset() {
     setMessage(initialMessage);
     setEmail(initialEmail);
@@ -133,7 +138,7 @@ export default function AppFunctional(props) {
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">{getXYMessage()}</h3>
-        <h3 id="steps">You moved {steps} time</h3>
+        <h3 id="steps">{getStepsMessage()}</h3>
       </div>
       <div id="grid">
         {
