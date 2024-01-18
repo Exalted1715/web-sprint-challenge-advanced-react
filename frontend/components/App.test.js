@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import AppFunctional from './AppFunctional';
-import './index.js';
+import Index from '../index'
 
 
 test('1. renders without errors', () => {
@@ -38,8 +38,8 @@ test('typing in the email input updates the email state', () => {
   
 });
 
-test('"Welcome to the GRID" is visible on the screen', () => {
-  render(<AppFunctional />);
+test('renders "Welcome to the GRID"', () => {
+  render(<Index />);
 
   // Use getByText to find the element containing the specified text
   const welcomeText = screen.getByText('Welcome to the GRID');
