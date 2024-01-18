@@ -37,13 +37,12 @@ test('typing in the email input updates the email state', () => {
   
 });
 
-test('submitting the form calls the onSubmit function', () => {
-  const { getByText, getByLabelText } = render(<AppFunctional />);
-  const emailInput = getByLabelText('type email');
-  const submitButton = getByText('Submit');
+test('"Welcome to the GRID" is visible on the screen', () => {
+  render(<AppFunctional />);
 
-  fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-  fireEvent.click(submitButton);
+  // Use getByText to find the element containing the specified text
+  const welcomeText = screen.getByText('Welcome to the GRID');
 
- 
+  // Assert that the element with the specified text is visible
+  expect(welcomeText).toBeVisible();
 });
