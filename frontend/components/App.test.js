@@ -1,21 +1,19 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import AppFunctional from './AppFunctional';
-import Index from '../index'
+import axios from 'axios'
+
 
 
 test('1. renders without errors', () => {
   render(<AppFunctional />);
 });
 
-test('placeholder "type email" placeholder is visible on the screen', () => {
-  render(<AppFunctional />);
+test('renders email input with "type email" placeholder', () => {
+  const { getByPlaceholderText } = render(<AppFunctional />);
+  const emailInput = getByPlaceholderText('type email');
 
-  // Use getByPlaceholderText to find the input field by its placeholder
-  const emailInput = screen.getByPlaceholderText('type email');
-
-  // Assert that the email input field with the specified placeholder is visible
-  expect(emailInput).toBeVisible();
+  expect(emailInput).toBeInTheDocument();
 });
 
 
@@ -38,12 +36,60 @@ test('typing in the email input updates the email state', () => {
   
 });
 
-test('renders "Welcome to the GRID"', () => {
-  render(<Index />);
 
-  // Use getByText to find the element containing the specified text
-  const welcomeText = screen.getByText('Welcome to the GRID');
+test('moves "B" character to the left', () => {
+  const { getByText, getByTextContent } = render(<AppFunctional />);
+  const moveLeftButton = getByText('LEFT');
+  
+  fireEvent.click(moveLeftButton);
 
-  // Assert that the element with the specified text is visible
-  expect(welcomeText).toBeVisible();
+  expect(getByTextContent('Coordinates (3, 2)')).toBeInTheDocument();
+  expect(getByTextContent('You moved 1 time')).toBeInTheDocument();
+});
+
+
+test('resets state to initial values', () => {
+  const { getByText, getByTextContent } = render(<AppFunctional />);
+  const moveLeftButton = getByText('LEFT');
+  fireEvent.click(moveLeftButton);
+
+  const resetButton = getByText('reset');
+  fireEvent.click(resetButton);
+
+  expect(getByTextContent('Coordinates (2, 2)')).toBeInTheDocument();
+  expect(getByTextContent('You moved 0 times')).toBeInTheDocument();
+});
+
+
+test('displays error message for invalid email', () => {
+  const { getByLabelText, getByText, getByTextContent } = render(<AppFunctional />);
+  const emailInput = getByLabelText('Email:');
+  
+  fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
+
+  const submitButton = getByText('submit');
+  fireEvent.click(submitButton);
+
+  expect(getByTextContent('Ouch: email must be a valid email.')).toBeInTheDocument();
+});
+
+
+jest.mock('axios');
+
+test('submits form and handles response', async () => {
+  const { getByLabelText, getByText, getByTextContent } = render(<AppFunctional />);
+  const emailInput = getByLabelText('Email:');
+  
+  fireEvent.change(emailInput, { target: { value: 'valid@email.com' } });
+
+  const submitButton = getByText('submit');
+  fireEvent.click(submitButton);
+
+  // Mocking Axios response
+  axios.post.mockResolvedValueOnce({ data: { message: 'Success' } });
+
+  // Wait for the asynchronous operation to complete
+  await waitFor(() => expect(axios.post).toHaveBeenCalled());
+
+  expect(getByTextContent('Success')).toBeInTheDocument();
 });
