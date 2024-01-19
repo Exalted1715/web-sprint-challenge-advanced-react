@@ -138,8 +138,7 @@ function isValidEmail(email) {
       setMessage(response.data.message);
       console.log(response.data.message);
       setEmail('');
-      setIndex(initialIndex);
-      setSteps(initialSteps);
+
     } catch (error) {
       console.error(error);
   
