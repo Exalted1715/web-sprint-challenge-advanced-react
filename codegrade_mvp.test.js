@@ -445,7 +445,7 @@ test('AppFunctional is a functional component', () => {
         fireEvent.change(email, { target: { value: 'lady@gaga.com' } })
         fireEvent.click(submit)
         await screen.findByText('lady win #49', queryOptions, waitForOptions)
-        expect(coordinates.textContent).toMatch(/\(3.*1\)$/)
+        expect(coordinates.textContent).toMatch(/\(2.*2\)$/)
         expect(steps.textContent).toBe('You moved 2 times')
       })
     })
